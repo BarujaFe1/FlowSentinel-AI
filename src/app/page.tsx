@@ -1,103 +1,137 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight, FlaskConical, GitBranch, Shield, Zap } from "lucide-react";
+import { MarketingNav, MarketingFooter } from "@/components/layout/marketing-nav";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const features = [
+  {
+    icon: GitBranch,
+    title: "Flow CRUD",
+    description: "Mapeie cada passo do seu agente WhatsApp com pesos de risco por etapa.",
+  },
+  {
+    icon: FlaskConical,
+    title: "Simulação com Personas",
+    description: "Teste contra clientes ansiosos, indecisos e reclamões antes do deploy.",
+  },
+  {
+    icon: Shield,
+    title: "Risk Score",
+    description: "Score de risco, heatmap de falhas e detecção de regressão entre versões.",
+  },
+  {
+    icon: Zap,
+    title: "Replay & Reports",
+    description: "Replay conversacional frame-a-frame e export JSON/CSV para o time.",
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="gradient-hero min-h-screen">
+      <MarketingNav />
+      <main className="mx-auto max-w-6xl px-4 pt-28 sm:px-6 sm:pt-32">
+        <section className="text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-[var(--accent-teal)]">
+              QA Lab for AI Support Agents
+            </p>
+            <h1 className="font-display text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
+              Simule falhas
+              <br />
+              <span className="text-[var(--accent-amber)]">antes do cliente</span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+              FlowSentinel AI é o laboratório de QA para agentes WhatsApp e suporte com IA.
+              Simule conversas, ranqueie riscos e reproduza falhas — tudo antes do deploy.
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link href="/signup">
+                <Button size="lg" className="gap-2">
+                  Começar demo grátis <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/app">
+                <Button variant="secondary" size="lg">
+                  Ver demo Pizzaria Flow
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mx-auto mt-16 max-w-4xl"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+            <Card className="overflow-hidden border-[var(--border)]">
+              <CardContent className="p-0">
+                <div className="grid gap-px bg-[var(--border)] sm:grid-cols-3">
+                  {[
+                    { label: "Risk Score", value: "34", sub: "Pedido Pizza v3", color: "text-[var(--success)]" },
+                    { label: "Falhas críticas", value: "1", sub: "Reclamação v2", color: "text-[var(--risk-critical)]" },
+                    { label: "Simulações", value: "12", sub: "Este mês", color: "text-[var(--accent-amber)]" },
+                  ].map((stat) => (
+                    <div key={stat.label} className="bg-[var(--bg-surface)] p-6 text-left">
+                      <p className="text-xs uppercase tracking-wider text-[var(--text-muted)]">{stat.label}</p>
+                      <p className={`font-display mt-1 text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+                      <p className="text-xs text-[var(--text-secondary)]">{stat.sub}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </section>
+
+        <section id="features" className="mt-32">
+          <h2 className="font-display text-center text-3xl font-bold">Tudo que seu agente precisa</h2>
+          <p className="mx-auto mt-4 max-w-xl text-center text-[var(--text-secondary)]">
+            Do mapeamento de fluxos ao replay de falhas — um QA lab completo para times de suporte.
+          </p>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            {features.map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Card className="h-full transition-colors hover:border-[var(--accent-amber)]/30">
+                  <CardContent className="p-6">
+                    <f.icon className="h-8 w-8 text-[var(--accent-amber)]" />
+                    <h3 className="font-display mt-4 text-lg font-semibold">{f.title}</h3>
+                    <p className="mt-2 text-sm text-[var(--text-secondary)]">{f.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-32 rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-8 text-center sm:p-12">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">Pronto para testar seu agente?</h2>
+          <p className="mt-3 text-[var(--text-secondary)]">
+            Demo completa com cenário Pizzaria Flow — sem credenciais necessárias.
+          </p>
+          <Link href="/signup" className="mt-6 inline-block">
+            <Button size="lg">Criar conta grátis</Button>
+          </Link>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <div className="mt-24">
+        <MarketingFooter />
+      </div>
     </div>
   );
 }

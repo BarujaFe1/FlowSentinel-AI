@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" fill="none">
+  <rect width="1200" height="675" fill="#0c0e12"/>
+  <rect x="0" y="0" width="240" height="675" fill="#12151c"/>
+  <rect x="260" y="40" width="200" height="100" rx="12" fill="#181c26" stroke="#2a3040"/>
+  <rect x="480" y="40" width="200" height="100" rx="12" fill="#181c26" stroke="#2a3040"/>
+  <rect x="700" y="40" width="200" height="100" rx="12" fill="#181c26" stroke="#2a3040"/>
+  <rect x="920" y="40" width="200" height="100" rx="12" fill="#181c26" stroke="#2a3040"/>
+  <rect x="260" y="170" width="860" height="460" rx="12" fill="#181c26" stroke="#2a3040"/>
+  <text x="260" y="200" fill="#f5a623" font-family="sans-serif" font-size="18" font-weight="bold">FlowSentinel Dashboard</text>
+  <rect x="280" y="220" width="400" height="180" rx="8" fill="#1f2430"/>
+  <rect x="700" y="220" width="400" height="180" rx="8" fill="#1f2430"/>
+  <text x="40" y="80" fill="#9aa3b5" font-family="sans-serif" font-size="14">Dashboard</text>
+  <text x="40" y="120" fill="#9aa3b5" font-family="sans-serif" font-size="14">Flows</text>
+  <text x="40" y="160" fill="#f5a623" font-family="sans-serif" font-size="14">Simulations</text>
+</svg>
