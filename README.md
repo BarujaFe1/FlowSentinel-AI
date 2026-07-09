@@ -7,6 +7,7 @@
   <p><strong>QA lab, simulation and risk scoring for WhatsApp/AI customer-support agents.</strong></p>
 
   <p>
+    <a href="#-live-demo">Live Demo</a> •
     <a href="#-visão-geral--overview">PT-BR / English Overview</a> •
     <a href="#-product-preview">Preview</a> •
     <a href="#-screenshots">Screenshots</a> •
@@ -17,18 +18,39 @@
   </p>
 
   <p>
+    <a href="https://flowsentinel-ai.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live%20Demo-flowsentinel--ai.vercel.app-00C7B7?style=for-the-badge&logo=vercel&logoColor=white" /></a>
     <img alt="Next.js" src="https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=nextdotjs" />
     <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-React-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
     <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Auth%20%2B%20RLS-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" />
-    <img alt="Stripe" src="https://img.shields.io/badge/Billing-Stripe%20%2F%20MercadoPago-635BFF?style=for-the-badge&logo=stripe&logoColor=white" />
+    <img alt="Billing Mock" src="https://img.shields.io/badge/Billing-Mock%20Provider-F59E0B?style=for-the-badge" />
     <img alt="Vitest" src="https://img.shields.io/badge/Vitest-Tests-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" />
-    <img alt="Demo Ready" src="https://img.shields.io/badge/Demo-Mode%20Ready-F59E0B?style=for-the-badge" />
   </p>
 </div>
 
 <p align="center">
   <img src="./assets/hero-cover.png" alt="FlowSentinel AI product overview" width="100%" />
 </p>
+
+---
+
+## 🌐 Live Demo
+
+**URL:** [https://flowsentinel-ai.vercel.app](https://flowsentinel-ai.vercel.app)
+
+| | |
+|---|---|
+| **Login demo** | `demo@pizzariaflow.com.br` |
+| **Senha** | qualquer senha com **6+ caracteres** (ex.: `demo123`) |
+| **Billing** | `BILLING_PROVIDER=mock` — **sem cobrança real** |
+| **Modo** | MVP de laboratório / portfólio (não produção) |
+
+### Checklist rápido da demo
+1. Abrir a URL → **Login** com as credenciais acima  
+2. Entrar no **lab** (`/app`) → ver risk score e KPIs  
+3. Abrir **Simulações** → replay / falhas  
+4. Ir em **Billing** → portal mock (sem Stripe/Mercado Pago real)
+
+> Deployment Protection / SSO deve permanecer **desligado** para a demo pública.
 
 ---
 
