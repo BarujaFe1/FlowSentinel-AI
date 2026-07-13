@@ -93,7 +93,23 @@ export interface SimulationRun {
   heatmap: number[];
   startedAt: string;
   completedAt?: string;
+  /** Positive = worse vs baseline risk score. Undefined = no baseline. */
   regressionDelta?: number;
+  regressionLabel?: string;
+  scenarioId?: string;
+  agentBuildId?: string;
+  baselineSimulationId?: string;
+}
+
+/** Immutable snapshot of a flow prompt/config at a given version (lab agent build). */
+export interface AgentBuild {
+  id: string;
+  workspaceId: string;
+  flowId: string;
+  version: number;
+  label: string;
+  notes: string;
+  createdAt: string;
 }
 
 export interface FailureReport {

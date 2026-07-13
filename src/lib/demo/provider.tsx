@@ -149,6 +149,7 @@ function createEmptyClientStore(): DemoStore {
     personas: [],
     simulations: [],
     reports: [],
+    agentBuilds: [],
     session: null,
     webhookEvents: [],
   };

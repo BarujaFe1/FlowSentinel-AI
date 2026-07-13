@@ -6,6 +6,7 @@ import type {
   SimulationRun,
   User,
   Workspace,
+  AgentBuild,
 } from "@/lib/types";
 
 export interface DemoStore {
@@ -15,6 +16,7 @@ export interface DemoStore {
   personas: Persona[];
   simulations: SimulationRun[];
   reports: FailureReport[];
+  agentBuilds: AgentBuild[];
   session: DemoSession | null;
   webhookEvents: string[];
 }
@@ -41,6 +43,7 @@ export function createEmptyStore(): DemoStore {
     personas: [],
     simulations: [],
     reports: [],
+    agentBuilds: [],
     session: null,
     webhookEvents: [],
   };
@@ -53,7 +56,12 @@ export function getDemoStore(): DemoStore {
   try {
     const raw = localStorage.getItem(DEMO_STORAGE_KEY);
     if (!raw) return createEmptyStore();
-    return JSON.parse(raw) as DemoStore;
+    const parsed = JSON.parse(raw) as DemoStore;
+    // Migrate older stores missing agentBuilds
+    if (!Array.isArray(parsed.agentBuilds)) {
+      parsed.agentBuilds = [];
+    }
+    return parsed;
   } catch {
     return createEmptyStore();
   }
