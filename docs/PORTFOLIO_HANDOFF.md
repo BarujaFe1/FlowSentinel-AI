@@ -76,4 +76,9 @@ Baseline at start of this pass: lint/typecheck/test already green (13 tests).
 - `tests/scoring-adversarial.test.ts`
 - `README.md`, `docs/*`
 
-Supermegaprompt (fora do repo): `C:\dev\prompts_para_port\flowsentinel-ai-supermegaprompt-portfolio.md`
+Supermegaprompt (fora do repo, **obrigatório / confirmado**):  
+`C:\dev\prompts_para_port\flowsentinel-ai-supermegaprompt-portfolio.md`
+
+### Gates re-verificados (2026-07-13, workspace `G:\dev\FlowSentinel-AI`)
+- lint ✅ · typecheck ✅ · test **21/21** ✅ · build ✅  
+- Demo pública https://flowsentinel-ai.vercel.app → **HTTP 200**, sem marcadores adversarial no HTML (provável build antigo de `main`).
