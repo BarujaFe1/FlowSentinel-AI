@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loginSchema } from "@/lib/validation/schemas";
-import { seedDemoData } from "@/lib/demo/seed";
+import { ensureDemoData } from "@/lib/demo/seed";
+import { saveDemoStore } from "@/lib/demo/store";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,7 +26,19 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
-    seedDemoData();
+
+    // Preserve existing lab data; only seed when storage was never created.
+    const store = ensureDemoData();
+    const user = store.users[0];
+    const workspace = store.workspaces[0];
+    store.session = {
+      userId: user?.id ?? "user-demo",
+      workspaceId: workspace?.id ?? store.session?.workspaceId ?? "ws-demo",
+      email: result.data.email,
+      name: user?.name ?? "Demo",
+    };
+    saveDemoStore(store);
+
     setTimeout(() => {
       router.push("/app");
     }, 400);

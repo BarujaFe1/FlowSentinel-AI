@@ -4,6 +4,10 @@ import { runMockSimulation } from "@/lib/demo/simulation-runner";
 import { simulationRunSchema } from "@/lib/validation/schemas";
 import { checkEntitlement } from "@/lib/billing/entitlements";
 
+/**
+ * Lab-only endpoint: runs against in-module seed entities (not the browser store).
+ * Prefer the client runner in /app/simulations for demo evidence packs.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
