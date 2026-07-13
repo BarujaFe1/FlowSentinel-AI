@@ -98,7 +98,7 @@ Before this pass the product scored ~**6.5/10** for public portfolio: strong nar
 ## Final checklist
 
 - [x] Install works  
-- [ ] Lint / typecheck / test / build verified on this machine  
+- [x] Lint / typecheck / test / build verified on this machine  
 - [x] Main bugs fixed or documented  
 - [x] README portfolio-ready (assets honest)  
 - [x] Docs created/updated  
@@ -106,7 +106,7 @@ Before this pass the product scored ~**6.5/10** for public portfolio: strong nar
 - [x] `.env.example` + `.gitignore` protect secrets  
 - [x] Essential tests expanded  
 - [x] UX reviewed (banner, settings, mobile menu, hydrate)  
-- [ ] `docs/HANDOFF.md` + commit/push  
+- [x] `docs/HANDOFF.md` + commit/push  
 
 ---
 
