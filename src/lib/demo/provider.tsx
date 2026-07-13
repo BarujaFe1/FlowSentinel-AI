@@ -2,12 +2,13 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { DemoStore } from "@/lib/demo/store";
-import { getDemoStore, saveDemoStore } from "@/lib/demo/store";
+import { getDemoStore, hasDemoStore, saveDemoStore } from "@/lib/demo/store";
 import { ensureDemoData, seedDemoData } from "@/lib/demo/seed";
-import type { Flow, Persona, SimulationRun, Workspace } from "@/lib/types";
+import type { FailureReport, Flow, Persona, SimulationRun, Workspace } from "@/lib/types";
 
 interface DemoContextValue {
   store: DemoStore;
+  hydrated: boolean;
   workspace: Workspace | null;
   refresh: () => void;
   updateFlow: (flow: Flow) => void;
@@ -18,6 +19,7 @@ interface DemoContextValue {
   deletePersona: (id: string) => void;
   addSimulation: (sim: SimulationRun) => void;
   updateSimulation: (sim: SimulationRun) => void;
+  updateWorkspace: (workspace: Workspace) => void;
   setSession: (session: DemoStore["session"]) => void;
   resetDemo: () => void;
 }
@@ -26,6 +28,7 @@ const DemoContext = createContext<DemoContextValue | null>(null);
 
 export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [store, setStore] = useState<DemoStore>(() => createEmptyClientStore());
+  const [hydrated, setHydrated] = useState(false);
 
   const refresh = useCallback(() => {
     setStore(getDemoStore());
@@ -34,6 +37,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const data = ensureDemoData();
     setStore(data);
+    setHydrated(true);
   }, []);
 
   const persist = useCallback((next: DemoStore) => {
@@ -49,6 +53,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<DemoContextValue>(
     () => ({
       store,
+      hydrated,
       workspace,
       refresh,
       updateFlow: (flow) => {
@@ -88,12 +93,39 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         persist({ ...store, personas: store.personas.filter((p) => p.id !== id) });
       },
       addSimulation: (sim) => {
-        persist({ ...store, simulations: [sim, ...store.simulations] });
+        const flow = store.flows.find((f) => f.id === sim.flowId);
+        const report: FailureReport = {
+          id: `report-${sim.id}`,
+          workspaceId: sim.workspaceId,
+          simulationId: sim.id,
+          flowId: sim.flowId,
+          flowName: flow?.name ?? "Flow",
+          riskScore: sim.riskScore,
+          topFailures: sim.failures.slice(0, 3),
+          createdAt: sim.completedAt ?? sim.startedAt,
+        };
+        const workspaces = store.workspaces.map((w) =>
+          w.id === sim.workspaceId
+            ? { ...w, simulationsThisMonth: w.simulationsThisMonth + 1 }
+            : w,
+        );
+        persist({
+          ...store,
+          workspaces,
+          simulations: [sim, ...store.simulations],
+          reports: [report, ...store.reports],
+        });
       },
       updateSimulation: (sim) => {
         persist({
           ...store,
           simulations: store.simulations.map((s) => (s.id === sim.id ? sim : s)),
+        });
+      },
+      updateWorkspace: (ws) => {
+        persist({
+          ...store,
+          workspaces: store.workspaces.map((w) => (w.id === ws.id ? ws : w)),
         });
       },
       setSession: (session) => {
@@ -103,7 +135,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         persist(seedDemoData());
       },
     }),
-    [store, workspace, refresh, persist],
+    [store, hydrated, workspace, refresh, persist],
   );
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;
@@ -117,6 +149,7 @@ function createEmptyClientStore(): DemoStore {
     personas: [],
     simulations: [],
     reports: [],
+    agentBuilds: [],
     session: null,
     webhookEvents: [],
   };
@@ -127,3 +160,5 @@ export function useDemo() {
   if (!ctx) throw new Error("useDemo must be used within DemoProvider");
   return ctx;
 }
+
+export { hasDemoStore };

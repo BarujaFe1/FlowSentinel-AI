@@ -63,7 +63,8 @@ export class MercadoPagoBillingProvider implements BillingProvider {
     };
   }
 
-  async handleWebhook(payload: string, _signature: string): Promise<WebhookResult> {
+  async handleWebhook(payload: string, signature: string): Promise<WebhookResult> {
+    void signature;
     let eventId = `mp_evt_${Date.now()}`;
     let action = "payment.updated";
 

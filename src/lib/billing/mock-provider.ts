@@ -1,6 +1,6 @@
 import type { PlanId } from "@/lib/types";
 import type { BillingProvider, CheckoutSession, PortalSession, WebhookResult } from "./billing-provider";
-import { PLANS } from "./plans";
+import { routeWebhook } from "./webhook-router";
 
 export class MockBillingProvider implements BillingProvider {
   name = "mock";
@@ -12,7 +12,6 @@ export class MockBillingProvider implements BillingProvider {
     successUrl: string;
     cancelUrl: string;
   }): Promise<CheckoutSession> {
-    const plan = PLANS[params.planId as keyof typeof PLANS];
     const sessionId = `mock_cs_${Date.now()}`;
     const url = `${params.successUrl}?session_id=${sessionId}&plan=${params.planId}&demo=true`;
     return { id: sessionId, url, planId: params.planId };
@@ -25,24 +24,26 @@ export class MockBillingProvider implements BillingProvider {
     };
   }
 
-  async handleWebhook(payload: string, _signature: string): Promise<WebhookResult> {
+  async handleWebhook(payload: string, signature: string): Promise<WebhookResult> {
+    void signature;
     let eventId = `mock_evt_${Date.now()}`;
-    let action = "unknown";
+    let eventType = "checkout.session.completed";
+    let data: Record<string, unknown> = {};
 
     try {
-      const data = JSON.parse(payload) as { id?: string; type?: string };
-      if (data.id) eventId = data.id;
-      if (data.type) action = data.type;
+      const parsed = JSON.parse(payload) as {
+        id?: string;
+        type?: string;
+        data?: Record<string, unknown>;
+      };
+      if (parsed.id) eventId = parsed.id;
+      if (parsed.type) eventType = parsed.type;
+      if (parsed.data) data = parsed.data;
     } catch {
-      // use defaults
+      // use defaults for malformed demo payloads
     }
 
-    return {
-      processed: true,
-      eventId,
-      action,
-      message: "Mock webhook processed (demo mode)",
-    };
+    return routeWebhook(eventId, eventType, data);
   }
 }
 

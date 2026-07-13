@@ -1,16 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useDemo } from "@/lib/demo/provider";
 import { PLANS } from "@/lib/billing/plans";
 import { getUsagePercent } from "@/lib/billing/entitlements";
+import type { PlanId } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function BillingPage() {
-  const { workspace, store } = useDemo();
+const PLAN_IDS: PlanId[] = ["starter", "pro", "business", "free"];
+
+function isPlanId(value: string): value is PlanId {
+  return PLAN_IDS.includes(value as PlanId);
+}
+
+function BillingContent() {
+  const { workspace, store, updateWorkspace } = useDemo();
+  const searchParams = useSearchParams();
+  const [notice, setNotice] = useState("");
   const plan = workspace?.planId && workspace.planId !== "free" ? PLANS[workspace.planId] : null;
+
+  useEffect(() => {
+    if (!workspace) return;
+    const success = searchParams.get("success");
+    const planParam = searchParams.get("plan");
+    if (success === "true" && planParam && isPlanId(planParam) && planParam !== "free") {
+      if (workspace.planId !== planParam) {
+        updateWorkspace({ ...workspace, planId: planParam });
+        setNotice(`Plano mock atualizado para ${planParam} (sem cobrança real).`);
+      }
+    }
+  }, [searchParams, workspace, updateWorkspace]);
 
   async function openPortal() {
     const res = await fetch("/api/billing/portal", {
@@ -26,8 +50,17 @@ export default function BillingPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-2xl font-bold">Billing</h1>
-        <p className="text-[var(--text-secondary)]">Plano e uso do workspace</p>
+        <p className="text-[var(--text-secondary)]">Plano e uso do workspace (mock)</p>
       </div>
+
+      {notice && (
+        <p
+          className="rounded-lg border border-[var(--accent-teal)]/40 bg-[var(--accent-teal)]/10 px-3 py-2 text-sm text-[var(--accent-teal)]"
+          role="status"
+        >
+          {notice}
+        </p>
+      )}
 
       <Card>
         <CardHeader>
@@ -81,5 +114,13 @@ export default function BillingPage() {
         </Card>
       )}
     </div>
+  );
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <BillingContent />
+    </Suspense>
   );
 }

@@ -32,8 +32,8 @@ export function FailureHeatmap({
                 style={{ width: `${intensity * 100}%`, opacity: 0.4 + intensity * 0.6 }}
               />
             </div>
-            <span className="w-10 text-right text-xs text-[var(--text-secondary)]">
-              {Math.round(value * 100)}%
+            <span className="w-14 text-right text-xs text-[var(--text-secondary)]">
+              {(value * 100).toFixed(0)}
             </span>
           </div>
         );
