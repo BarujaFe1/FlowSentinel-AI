@@ -1,21 +1,40 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDemo } from "@/lib/demo/provider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { Flow } from "@/lib/types";
 
 export default function FlowDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { store, updateFlow } = useDemo();
+  const router = useRouter();
+  const { store, hydrated, updateFlow } = useDemo();
   const flow = store.flows.find((f) => f.id === id);
-  const [edited, setEdited] = useState(flow);
+  const [edited, setEdited] = useState<Flow | null>(null);
+
+  useEffect(() => {
+    if (flow) {
+      setEdited(flow);
+    }
+  }, [flow]);
+
+  if (!hydrated) {
+    return (
+      <div className="space-y-6" aria-busy="true" aria-label="Carregando flow">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
 
   if (!flow || !edited) {
     return (
@@ -23,7 +42,7 @@ export default function FlowDetailPage() {
         title="Flow não encontrado"
         description="Este flow pode ter sido removido."
         actionLabel="Voltar"
-        onAction={() => (window.location.href = "/app/flows")}
+        onAction={() => router.push("/app/flows")}
       />
     );
   }
@@ -37,7 +56,7 @@ export default function FlowDetailPage() {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Link href="/app/flows">
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" aria-label="Voltar para flows">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -59,12 +78,17 @@ export default function FlowDetailPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label>Nome</Label>
-            <Input value={edited.name} onChange={(e) => setEdited({ ...edited, name: e.target.value })} />
+            <Label htmlFor="flow-name">Nome</Label>
+            <Input
+              id="flow-name"
+              value={edited.name}
+              onChange={(e) => setEdited({ ...edited, name: e.target.value })}
+            />
           </div>
           <div>
-            <Label>Descrição</Label>
+            <Label htmlFor="flow-description">Descrição</Label>
             <Textarea
+              id="flow-description"
               value={edited.description}
               onChange={(e) => setEdited({ ...edited, description: e.target.value })}
             />
@@ -78,43 +102,46 @@ export default function FlowDetailPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {edited.steps.map((step, i) => (
-            <div key={step.id} className="rounded-lg border border-[var(--border)] p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-[var(--accent-amber)]">Passo {i + 1}</span>
-                <Badge>Risk {Math.round(step.riskWeight * 100)}%</Badge>
+            <div
+              key={step.id}
+              className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] p-4"
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <Badge variant="info">#{step.order}</Badge>
+                <span className="text-sm font-medium text-[var(--text-secondary)]">
+                  Passo {i + 1}
+                </span>
               </div>
-              <p className="mt-2 text-sm">
-                <span className="text-[var(--text-muted)]">Trigger: </span>
-                {step.trigger}
-              </p>
-              <p className="mt-1 text-sm">
-                <span className="text-[var(--text-muted)]">Esperado: </span>
-                {step.expectedResponse}
-              </p>
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor={`trigger-${step.id}`}>Trigger</Label>
+                  <Input
+                    id={`trigger-${step.id}`}
+                    value={step.trigger}
+                    onChange={(e) => {
+                      const steps = edited.steps.map((s) =>
+                        s.id === step.id ? { ...s, trigger: e.target.value } : s,
+                      );
+                      setEdited({ ...edited, steps });
+                    }}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor={`expected-${step.id}`}>Resposta esperada</Label>
+                  <Textarea
+                    id={`expected-${step.id}`}
+                    value={step.expectedResponse}
+                    onChange={(e) => {
+                      const steps = edited.steps.map((s) =>
+                        s.id === step.id ? { ...s, expectedResponse: e.target.value } : s,
+                      );
+                      setEdited({ ...edited, steps });
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           ))}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Simulações deste flow</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {store.simulations
-            .filter((s) => s.flowId === id)
-            .map((sim) => (
-              <Link
-                key={sim.id}
-                href={`/app/simulations/${sim.id}`}
-                className="flex items-center justify-between rounded-lg border border-[var(--border)] p-3 hover:bg-[var(--bg-elevated)]"
-              >
-                <span className="text-sm">v{sim.flowVersion}</span>
-                <Badge variant={sim.riskScore >= 70 ? "danger" : sim.riskScore >= 40 ? "warning" : "success"}>
-                  Risk {sim.riskScore}
-                </Badge>
-              </Link>
-            ))}
         </CardContent>
       </Card>
     </div>

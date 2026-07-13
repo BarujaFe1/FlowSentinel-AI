@@ -19,13 +19,18 @@ export interface DemoStore {
   webhookEvents: string[];
 }
 
-const STORAGE_KEY = "flowsentinel-demo-store";
+export const DEMO_STORAGE_KEY = "flowsentinel-demo-store";
 
 function createId(): string {
   if (typeof crypto !== "undefined" && crypto.randomUUID) {
     return crypto.randomUUID();
   }
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+export function hasDemoStore(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(DEMO_STORAGE_KEY) !== null;
 }
 
 export function createEmptyStore(): DemoStore {
@@ -46,7 +51,7 @@ export function getDemoStore(): DemoStore {
     return createEmptyStore();
   }
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(DEMO_STORAGE_KEY);
     if (!raw) return createEmptyStore();
     return JSON.parse(raw) as DemoStore;
   } catch {
@@ -56,7 +61,7 @@ export function getDemoStore(): DemoStore {
 
 export function saveDemoStore(store: DemoStore): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(store));
 }
 
 export function resetDemoStore(): DemoStore {
@@ -78,6 +83,5 @@ export function setServerDemoStore(store: DemoStore): void {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var __flowsentinelStore: DemoStore | undefined;
 }

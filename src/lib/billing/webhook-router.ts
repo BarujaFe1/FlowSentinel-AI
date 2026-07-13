@@ -1,12 +1,18 @@
 import type { WebhookResult } from "./billing-provider";
 
+/**
+ * In-memory idempotency for the demo / serverless process lifetime.
+ * Not durable across cold starts — document this honestly for portfolio demos.
+ * Production would use a DB unique constraint on event_id.
+ */
 const processedEvents = new Set<string>();
 
 export function routeWebhook(
   eventId: string,
   eventType: string,
-  _data: Record<string, unknown>,
+  data: Record<string, unknown>,
 ): WebhookResult {
+  void data;
   if (processedEvents.has(eventId)) {
     return {
       processed: false,

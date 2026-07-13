@@ -1,6 +1,6 @@
-import type { FailureReport, Flow, Persona, SimulationRun, User, Workspace } from "@/lib/types";
+import type { Flow, Persona, SimulationRun, User, Workspace } from "@/lib/types";
 import type { DemoStore } from "@/lib/demo/store";
-import { generateId, getDemoStore, saveDemoStore } from "./store";
+import { getDemoStore, hasDemoStore, saveDemoStore } from "./store";
 
 const DEMO_USER: User = {
   id: "user-demo-felipe",
@@ -273,11 +273,12 @@ export function seedDemoData(): DemoStore {
 }
 
 export function ensureDemoData(): DemoStore {
-  const store = getDemoStore();
-  if (store.flows.length === 0) {
+  // Only auto-seed when the storage key was never created.
+  // An intentional empty workspace (user deleted all flows) must not be wiped.
+  if (!hasDemoStore()) {
     return seedDemoData();
   }
-  return store;
+  return getDemoStore();
 }
 
 export function isDemoMode(): boolean {
