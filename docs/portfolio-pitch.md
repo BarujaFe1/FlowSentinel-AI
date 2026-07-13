@@ -1,45 +1,40 @@
 # Portfolio Pitch
 
-**FlowSentinel AI** — QA Lab for WhatsApp & AI Support Agents
+**FlowSentinel AI** — Lab de QA para agentes de atendimento (WhatsApp/IA)
 
-## One-Liner
+## One-liner
 
-Simulate customer conversations, score agent risk, and replay failures before they reach real customers.
+Cenários adversariais reproduzíveis, score de risco e replay — evidência no lab antes do go-live.
 
 ## Problem
 
-Teams deploying WhatsApp AI agents lack structured QA. Manual testing misses edge cases; production failures damage brand trust and increase support costs.
+Times colocam bots em atendimento sem harness de regressão. Falhas de política, tom e PII só aparecem com cliente real.
 
-## Solution
+## Solution (o que existe de verdade)
 
-FlowSentinel provides:
-- **Flow mapping** with per-step risk weights
-- **Persona-based simulation** (angry, indecisive, urgent customers)
-- **Risk scoring** and failure heatmaps
-- **Version regression** detection
-- **Conversation replay** frame-by-frame
+- Flows + personas no demo store
+- Suite adversarial scriptada (policy, PII, loop, tom…)
+- Agent builds (ex.: vulnerável vs guardrail)
+- Risk score ponderado por severidade + Δ vs baseline
+- Replay + heatmap de peso de risco
+- Case in-app de falha pré-produção
+- Billing adapter mock + entitlements
 
-## Demo Scenario
+## Não diga
 
-Pizzaria Flow — a pizza shop WhatsApp agent with order and complaint flows, 3 personas, and pre-loaded simulation results showing real failure patterns.
+- “Integração WhatsApp de produção”
+- “Detecção de regressão com ML enterprise”
+- “Webhooks persistentes em produção” (idempotência é in-memory)
 
-## Tech Highlights
+## Demo
 
-- Next.js 15 App Router, TypeScript strict
-- Multi-provider billing (Stripe + MercadoPago + mock)
-- Plan gating with entitlements
-- Idempotent webhook processing
-- Demo mode for zero-config sales demos
+Pizzaria Flow — reclamação/reembolso: `refund-vulnerable-v2` vs `refund-guardrail-v3`.  
+Guia: `docs/DEMO_GUIDE.md`
+
+## Tech
+
+Next.js 15, TypeScript, Vitest, CI, Vercel demo, localStorage lab store.
 
 ## Author
 
-**Felipe Alirio Baruja**
-- Portfolio: [barujafe.vercel.app](https://barujafe.vercel.app)
-- GitHub: [@BarujaFe1](https://github.com/BarujaFe1)
-- LinkedIn: [barujafe](https://linkedin.com/in/barujafe)
-
-## Pricing (BRL)
-
-- Starter: R$ 79/mês
-- Pro: R$ 199/mês
-- Business: R$ 499+/mês
+**Felipe Alírio Baruja** · [barujafe.vercel.app](https://barujafe.vercel.app) · [@BarujaFe1](https://github.com/BarujaFe1)

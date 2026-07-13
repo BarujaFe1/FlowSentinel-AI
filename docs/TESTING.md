@@ -24,6 +24,7 @@ npm run test:e2e   # requires Playwright browsers installed
 | `entitlements.test.ts` | Plan limits, export gating, usage % |
 | `webhook-idempotency.test.ts` | Duplicate event skip |
 | `demo-store.test.ts` | Seed-once behavior, empty workspace preserve, mock→router |
+| `scoring-adversarial.test.ts` | Risk/pass formulas, regression Δ, adversarial fix vs vulnerable, seeded RNG |
 | `e2e/smoke.spec.ts` | Basic navigation smoke (optional locally) |
 
 ## How to add a test when fixing a bug

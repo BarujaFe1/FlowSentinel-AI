@@ -94,10 +94,23 @@ Treat APIs as **demo/lab endpoints**, not multi-tenant production APIs.
 - Logout clears session and returns to `/login`.
 - Not cookie/JWT/Supabase Auth — by design for zero-config demos.
 
+## Simulation & evaluation (lab)
+
+| Module | Role |
+|--------|------|
+| `adversarial-scenarios.ts` | Scripted packs (policy, PII, loop, tone…) |
+| `scoring.ts` | pass rate, severity-weighted risk, regression Δ |
+| `simulation-runner.ts` | Seeded probabilistic runner + adversarial runner |
+| `AgentBuild` | Labeled version of a flow used as eval target |
+
+Regression = `current.riskScore - baseline.riskScore` for the same scenario line. Positive Δ = worse.
+
 ## Related docs
 
 - [TECHNICAL_DECISIONS.md](./TECHNICAL_DECISIONS.md)
 - [TESTING.md](./TESTING.md)
 - [DEPLOYMENT.md](./DEPLOYMENT.md)
-- [data-model.md](./data-model.md)
+- [CASE_PRE_PROD_REFUND.md](./CASE_PRE_PROD_REFUND.md)
+- [DEMO_GUIDE.md](./DEMO_GUIDE.md)
 - [AUDIT_REPORT.md](./AUDIT_REPORT.md)
+- [PORTFOLIO_HANDOFF.md](./PORTFOLIO_HANDOFF.md)
