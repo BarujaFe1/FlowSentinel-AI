@@ -1,0 +1,26 @@
+{
+    "routes":  [
+                   {
+                       "path":  "/",
+                       "name":  "home",
+                       "fullPage":  true
+                   },
+                   {
+                       "path":  "/login",
+                       "name":  "login",
+                       "fullPage":  true
+                   },
+                   {
+                       "path":  "/pricing",
+                       "name":  "pricing",
+                       "fullPage":  true
+                   }
+               ],
+    "baseUrl":  "https://flowsentinel-ai.vercel.app",
+    "viewport":  {
+                     "height":  900,
+                     "width":  1440
+                 },
+    "name":  "FlowSentinel-AI",
+    "locale":  "pt-BR"
+}

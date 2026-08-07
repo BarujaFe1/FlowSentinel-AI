@@ -11,7 +11,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\" \"tests/**/*.{ts,tsx}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\" \"tests/**/*.{ts,tsx}\"",
+    "screenshots": "node scripts/capture-screens.mjs",
+    "screenshots:install": "npx playwright install chromium"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
